@@ -76,6 +76,7 @@ const login = async (req,res)=>{
 const verificarToken = (req,res) => {
     
     const resultado = jwt.verify(req.body.token,configApp.Main.TokenKey);
+    console.log(resultado)
     if(resultado.user.rol){
         res.status(200).json({
             message: "ok",
