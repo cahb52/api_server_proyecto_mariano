@@ -2,6 +2,7 @@ const { Router } = require('express');
 const router = Router();
 const { listarPersonals, crearPersonals,verPersonal,actualizarPersonal,eliminarPersonal} = require('../controllers/personals.controller');
 const {isSupervisor} = require('../middleware/autorizacion');
+
 //servicios supervisor
 
 router.get("/listar",isSupervisor,listarPersonals);
