@@ -57,6 +57,7 @@ const login = async (req,res)=>{
                             res.status(200).json({
                                 token: token,
                                 ok: true,
+                                rol: usuarios.role.rol
                             });
                                                
                         });
@@ -73,9 +74,10 @@ const login = async (req,res)=>{
     }
 
 }
+
+
 const verificarToken = (req,res) => {
-    
-    const resultado = jwt.verify(req.body.token,configApp.Main.TokenKey);
+    const resultado = jwt.verify(req.params.token,configApp.Main.TokenKey);
     console.log(resultado)
     if(resultado.user.rol){
         res.status(200).json({

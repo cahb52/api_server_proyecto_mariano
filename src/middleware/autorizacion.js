@@ -13,10 +13,16 @@ function verifyToken(req,res,next)
             next();
         }
         else{
-            res.sendStatus(403);
+            res.status(200).json({
+                message: "errorauth",
+                type:"Usted no esta autorizado"
+            });
         }
     } catch (error) {
-        res.sendStatus(403);
+        res.status(200).json({
+            message: "errorauth",
+            type:"Usted no esta autorizado"
+        });
     }
    
 }
@@ -32,15 +38,24 @@ function isAdmin(req,res,next){
                 req.rol = resultado.user.rol;
             next();
             } else {
-                res.sendStatus(403);
+                res.status(200).json({
+                    message: "errorauth",
+                    type:"Usted no esta autorizado"
+                });
             }
             
         }
         else{
-            res.sendStatus(403);
+            res.status(200).json({
+                message: "errorauth",
+                type:"Usted no esta autorizado"
+            });
         }
     } catch (error) {
-        res.sendStatus(403);
+        res.status(200).json({
+            message: "errorauth",
+            type:"Usted no esta autorizado"
+        });
     }
 }
 function isTecnico(req,res,next){
@@ -55,15 +70,24 @@ function isTecnico(req,res,next){
                 req.rol = resultado.user.rol;
             next();
             } else {
-                res.sendStatus(403);
+                res.status(200).json({
+                    message: "errorauth",
+                    type:"Usted no esta autorizado"
+                });
             }
             
         }
         else{
-            res.sendStatus(403);
+            res.status(200).json({
+                message: "errorauth",
+                type:"Usted no esta autorizado"
+            });
         }
     } catch (error) {
-        res.sendStatus(403);
+        res.status(200).json({
+            message: "errorauth",
+            type:"Usted no esta autorizado"
+        });
     }
 }
 function isSupervisor(req,res,next){
@@ -78,15 +102,24 @@ function isSupervisor(req,res,next){
                 req.rol = resultado.user.rol;
             next();
             } else {
-                res.sendStatus(403);
+                res.status(200).json({
+                    message: "errorauth",
+                    type:"Usted no esta autorizado"
+                });
             }
             
         }
         else{
-            res.sendStatus(403);
+            res.status(200).json({
+                message: "errorauth",
+                type:"Usted no esta autorizado"
+            });
         }
     } catch (error) {
-        res.sendStatus(403);
+        res.status(200).json({
+            message: "errorauth",
+            type:"Usted no esta autorizado"
+        });
     }
 }
 

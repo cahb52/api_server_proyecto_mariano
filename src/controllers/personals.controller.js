@@ -165,11 +165,52 @@ const eliminarPersonal = async (req,res) => {
     }
 };
 
+
+const listarTecnicos = async (req,res)=>{
+    try {
+        var personals = await personal.findAll({
+            where: {'usuarios.id_rol':3},
+            order:['id_personal'],
+            include: [{all:true, nested:true},{
+                model: usuarios,
+               required:true,
+               on:{
+                id_rol: {
+                    [Op.col]:'usuario.id_users'
+                },
+                
+            },
+               attributes: { exclude: ['password'] }
+            }],
+          });
+        //console.log(personals);
+        if(personals != null){
+            // console.log(usuarios);
+            res.status(200).send(personals);
+        } else {
+            res.status(200).json({
+            message:'error',
+            type:'noencontrado'
+        });
+        }
+        
+    } catch(Error){
+        res.status(200).json({
+            message:'error',
+            type:'error_en_consulta'
+        });
+    }
+    
+
+}
+
+
 module.exports = {
     listarPersonals,
     crearPersonals,
     verPersonal,
     actualizarPersonal,
-    eliminarPersonal
+    eliminarPersonal,
+    listarTecnicos
 
 };

@@ -12,7 +12,7 @@ const listarVisitas = async (req,res)=>{
     //var resultado = jwt.verify(req.token,configApp.Main.TokenKey);
     try {
         var visitas = await visita.findAll({
-            include: [{
+            include: [{all: true, nested:true},{
                 model: clientes,
                required:true,
                on:{

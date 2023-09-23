@@ -7,7 +7,8 @@ const configApp = require('../config/config');
 const jwt = require("jsonwebtoken");
 
 router.post("/login",login);
-router.post('/verificar',verificarToken);
+// router.post('/verificar',verificarToken);
+router.get('/verificar/:token',verificarToken);
 
 //URL EXCLUSIVAS ADMIN
 
