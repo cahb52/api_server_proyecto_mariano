@@ -41,9 +41,9 @@ const login = async (req,res)=>{
             //console.log(usuarios);
             if(usuarios === null) {
                 res.status(200).json({
-                    token: 'nohaytoken',
+                    token: 'no hay usuario',
                     ok:false,
-                    rol:'ninguno'
+                    rol:'no hay usuario'
                     });
             } else {
                 const user = {
@@ -67,11 +67,12 @@ const login = async (req,res)=>{
             //console.log(usuarios);
           }
     }
+    
     } catch (error ){
         res.status(200).json({
-           token: 'nohaytoken',
+           token: 'error general',
            ok:false,
-           rol:'ninguno'
+           rol:'error genral'
         });
     }
 
