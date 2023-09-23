@@ -61,6 +61,7 @@ const listarVisitas = async (req,res)=>{
 }
 //creación de servicios via postgresql
 const crearVisita = async (req,res) => {
+    console.log(req.body)
     try {
         var visitas = await visita.create({
             id_cliente: req.body.id_cliente,
@@ -84,7 +85,7 @@ const crearVisita = async (req,res) => {
             console.log(visitas.id_visita); 
         res.status(200).json({
             message:'ok',
-            id_servicio: visitas.id_visita
+            id_visita: visitas.id_visita
         });
         } else {
             res.status(200).json({
@@ -100,7 +101,35 @@ const crearVisita = async (req,res) => {
 }
 const verVisita = async (req,res) =>{
     try {
-        var visitas = await visita.findByPk(req.params.id);
+        var visitas = await visita.findOne({
+            include: [{all: true, nested:true},{
+                model: clientes,
+               required:true,
+               on:{
+                id_cliente: {
+                    [Op.col]:'visitas.id_cliente'
+                }
+                },
+            },{
+                model: servicio,
+               required:true,
+               on:{
+                id_servicio: {
+                    [Op.col]:'visitas.id_servicio'
+                }
+                },
+            },{
+                model: personal,
+               required:true,
+               on:{
+                id_personal: {
+                    [Op.col]:'visitas.id_personal'
+                }
+                },
+               
+            }],
+            where: {id_visita:req.params.id}
+        });
         if(visitas != null){
             //console.log(servicios);
             res.status(200).json(visitas);

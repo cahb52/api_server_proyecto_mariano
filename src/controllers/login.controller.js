@@ -13,7 +13,7 @@ const login = async (req,res)=>{
     try {
         if (req.method == 'POST') {
             POST = req.body
-            console.log(POST.password);
+            //console.log(POST.password);
         if(POST.username=="" || POST.username==undefined)
         {
             res.sendStatus(500);
@@ -51,7 +51,7 @@ const login = async (req,res)=>{
                     nombre:POST.username,
                     rol:usuarios.role.rol
                     }
-                    console.log(user);
+                    //console.log(user);
 
                     jwt.sign({user},configApp.Main.TokenKey,{expiresIn:'24h'},(err,token)=>{
                             
@@ -81,7 +81,7 @@ const login = async (req,res)=>{
 
 const verificarToken = (req,res) => {
     const resultado = jwt.verify(req.params.token,configApp.Main.TokenKey);
-    console.log(resultado)
+    //console.log(resultado)
     if(resultado.user.rol){
         res.status(200).json({
             message: "ok",
