@@ -41,9 +41,10 @@ const login = async (req,res)=>{
             //console.log(usuarios);
             if(usuarios === null) {
                 res.status(200).json({
-                    message:"error",
-                    type:"usuario_no_encontrado"
-                });
+                    token: 'nohaytoken',
+                    ok:false,
+                    rol:'ninguno'
+                    });
             } else {
                 const user = {
                     id:usuarios.id_users,
@@ -68,8 +69,9 @@ const login = async (req,res)=>{
     }
     } catch (error ){
         res.status(200).json({
-            message:"error",
-            type:"error en la consulta"
+           token: 'nohaytoken',
+           ok:false,
+           rol:'ninguno'
         });
     }
 
