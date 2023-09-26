@@ -52,7 +52,6 @@ resultadosvisita.map((dato,i)=>{
     hora+=dato.hora_visita
     fecha+=dato.fecha
 }) 
-console.log(datocorreo)  
    let datos = "Hola!, su visita ha sido agendada con éxito en la fecha "+ fecha+" a las "+hora+", por favor espere a que el técnico le visite!, Gracias"
     const info = await transporter.sendMail({
     from: 'test@quetzalgt.com', // sender address
@@ -62,7 +61,7 @@ console.log(datocorreo)
     html: "<b>"+datos+"</b>", // html body
   });
 
-  console.log("Message sent: %s", info.messageId);
+  //console.log("Message sent: %s", info.messageId);
   //Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
 } catch(Error) {
     console.log(Error)
@@ -103,7 +102,7 @@ const listarVisitas = async (req,res)=>{
                
             }],
         });
-        console.log(visitas);
+        //console.log(visitas);
         if(visitas != null){
             // console.log(servicios);
             res.status(200).send(visitas);
@@ -125,7 +124,7 @@ const listarVisitas = async (req,res)=>{
 }
 //creación de servicios via postgresql
 const crearVisita = async (req,res) => {
-    console.log(req.body)
+   // console.log(req.body)
     try {
         var visitas = await visita.create({
             id_cliente: req.body.id_cliente,
@@ -147,7 +146,7 @@ const crearVisita = async (req,res) => {
         // console.log(visitas);
         if(visitas.id_visita) {
 
-            console.log(visitas.id_visita); 
+            //console.log(visitas.id_visita); 
             await enviarEmail(visitas.id_visita)
         res.status(200).json({
             message:'ok',
@@ -262,7 +261,7 @@ const eliminarVisita = async (req,res) => {
             }
         });
         if(visitas){
-            console.log(visitas);
+            //console.log(visitas);
             res.status(200).json({
                 message:'ok',
                 type:'eliminado'
