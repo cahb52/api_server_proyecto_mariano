@@ -49,7 +49,7 @@ const enviarEmail = async (idvisita) =>{
  let fecha = ''
 resultadosvisita.map((dato,i)=>{
     datocorreo+=dato.cliente.correo;
-    hora+=dato.hora
+    hora+=dato.hora_visita
     fecha+=dato.fecha
 }) 
 console.log(datocorreo)  
