@@ -1,6 +1,5 @@
 const { Sequelize } = require('sequelize');
-
-module.exports = new Sequelize('gaiaa', 'postgres', 'Felipito#12', {
+const db =  new Sequelize('gaiaa', 'postgres', 'Felipito#12', {
   host: 'localhost',
   dialect: 'postgres',
     pool:{
@@ -10,3 +9,4 @@ module.exports = new Sequelize('gaiaa', 'postgres', 'Felipito#12', {
         idle: 10000
   }
 });
+module.exports = db;

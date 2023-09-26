@@ -4,9 +4,72 @@ const visita = require('../models/visitas.js');
 const clientes = require('../models/clientes');
 const servicio = require('../models/servicios');
 const personal = require('../models/personal');
-const { Sequelize } = require('../config/database.js');
-const Op = Sequelize.Op;
+const { Sequelize} = require('../config/database.js');
+const db  = require('../config/rawQuerys.js');
+const { QueryTypes } = require('sequelize');
 
+
+
+const Op = Sequelize.Op;
+const nodemailer = require("nodemailer");
+const visitas = require('../models/visitas.js');
+
+const transporter = nodemailer.createTransport({
+  host: "mail.quetzalgt.com",
+  port: 465,
+  secure: true,
+  auth: {
+    //reemplazar valores con los necesarios en su servidor
+    user: "test@quetzalgt.com",
+    pass: "jTz5tkzt+aLK",
+  },
+});
+
+
+const enviarEmail = async (idvisita) =>{
+    try {
+   // const resultadosvisita =  db.query("select clientes.correo as correo, visitas.hora_visita as hora, visitas.fecha as fecha from visitas inner join clientes on visitas.id_cliente = clientes.id_cliente where visitas.id_visita = "+idvisita, { type: QueryTypes.SELECT })
+   const resultadosvisita = await visitas.findAll({
+    where:{
+        id_visita: idvisita
+    },
+    include: [{all:true, nested:true},{
+       model:clientes,
+       required:true,
+       on: {
+        id_cliente: {
+            [Op.col]:'visitas.id_cliente'
+        }
+       }
+    }]
+   });
+
+ let datocorreo = ''
+ let  hora = ''
+ let fecha = ''
+resultadosvisita.map((dato,i)=>{
+    datocorreo+=dato.cliente.correo;
+    hora+=dato.hora
+    fecha+=dato.fecha
+}) 
+console.log(datocorreo)  
+   let datos = "Hola!, su visita ha sido agendada con éxito en la fecha "+ fecha+" a las "+hora+", por favor espere a que el técnico le visite!, Gracias"
+    const info = await transporter.sendMail({
+    from: 'test@quetzalgt.com', // sender address
+    to: datocorreo, // list of receivers
+    subject: "Su visita fue agendada con éxito", // Subject line
+    text: datos, // plain text body
+    html: "<b>"+datos+"</b>", // html body
+  });
+
+  console.log("Message sent: %s", info.messageId);
+  //Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+} catch(Error) {
+    console.log(Error)
+}
+
+
+}
 
 const listarVisitas = async (req,res)=>{
     //var resultado = jwt.verify(req.token,configApp.Main.TokenKey);
@@ -21,6 +84,7 @@ const listarVisitas = async (req,res)=>{
                 }
                 },
             },{
+                
                 model: servicio,
                required:true,
                on:{
@@ -82,10 +146,12 @@ const crearVisita = async (req,res) => {
         ] });
         // console.log(visitas);
         if(visitas.id_visita) {
+
             console.log(visitas.id_visita); 
+            await enviarEmail(visitas.id_visita)
         res.status(200).json({
             message:'ok',
-            id_visita: visitas.id_visita
+            id_visita: visitas.id_visita,
         });
         } else {
             res.status(200).json({
@@ -99,6 +165,7 @@ const crearVisita = async (req,res) => {
     }
 
 }
+
 const verVisita = async (req,res) =>{
     try {
         var visitas = await visita.findOne({
