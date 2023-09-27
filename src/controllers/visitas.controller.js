@@ -47,11 +47,11 @@ const enviarEmail = async (idvisita) =>{
  let datocorreo = ''
  let  hora = ''
  let fecha = ''
-resultadosvisita.map((dato,i)=>{
+    resultadosvisita.map((dato,i)=>{
     datocorreo+=dato.cliente.correo;
     hora+=dato.hora_visita
     fecha+=dato.fecha
-}) 
+    }) 
    let datos = "Hola!, su visita ha sido agendada con éxito en la fecha "+ fecha+" a las "+hora+", por favor espere a que el técnico le visite!, Gracias"
     const info = await transporter.sendMail({
     from: 'test@quetzalgt.com', // sender address
@@ -217,6 +217,7 @@ const verVisita = async (req,res) =>{
 
 const actualizarVisita = async (req,res) => {
     try {
+        console.log(req.body)
         const visitas = await visita.update({
             id_cliente: req.body.id_cliente,
             id_servicio: req.body.id_servicio,
