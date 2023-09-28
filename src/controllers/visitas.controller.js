@@ -7,9 +7,6 @@ const personal = require('../models/personal');
 const { Sequelize} = require('../config/database.js');
 const db  = require('../config/rawQuerys.js');
 const { QueryTypes } = require('sequelize');
-
-
-
 const Op = Sequelize.Op;
 const nodemailer = require("nodemailer");
 const visitas = require('../models/visitas.js');
@@ -281,11 +278,61 @@ const eliminarVisita = async (req,res) => {
     }
 };
 
+
+//espacios para técnicos
+const listarVisitasTecnicos = async (req,res)=>{
+
+   try {
+    const bearerHeader = req.headers['authorization'];
+     if(typeof bearerHeader !== ' undefined'){
+            const bearerToken = bearerHeader.split(" ")[1];
+            req.token = bearerToken;
+            const  resultado = jwt.verify(req.token,configApp.Main.TokenKey);
+            await db.query("SELECT visitas.*, clientes.* FROM visitas "+
+            "inner join personals on visitas.id_personal = personals.id_personal "+
+            "inner join clientes on clientes.id_cliente = visitas.id_cliente "+
+            "inner join usuarios on personals.id_users = usuarios.id_users "+
+            "where usuarios.id_rol = 3 and visitas.estado <> '2' and usuarios.id_users ="+resultado.id,{ type: QueryTypes.SELECT })
+            .then((data)=>{
+                res.status(200).json(data);
+                //console.log(data)
+            })
+            .catch((error)=>{
+                console.log(error)
+                res.status(200).json({
+                    message:"ningunresultado",
+                    type:error,
+                    ok: "ok"
+                })
+            })
+            } else {
+                res.status(200).json({
+                    message: "noauth",
+                    type:"noauth",
+                    ok:"error"
+                })
+            }
+   }
+   catch(error){
+    console.log(error)
+    res.status(200).json({
+        message:"error general",
+        type:"errorgeneral",
+        ok:"error"
+    })
+   }
+
+}
+
+
+
+
 module.exports = {
     listarVisitas,
     crearVisita,
     verVisita,
     actualizarVisita,
-    eliminarVisita
+    eliminarVisita,
+    listarVisitasTecnicos
 
 };
